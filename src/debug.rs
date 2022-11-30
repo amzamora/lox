@@ -3,7 +3,7 @@ use crate::chunk;
 pub fn dissamble_chunk(chunk: &chunk::Chunk, name: &str) {
    println!("== {} ==", name);
    let mut offset: usize = 0;
-   while offset < chunk.len() {
+   while offset < chunk.code.len() {
     offset = dissamble_instruction(chunk, offset);
    } 
 }
@@ -11,8 +11,9 @@ pub fn dissamble_chunk(chunk: &chunk::Chunk, name: &str) {
 fn dissamble_instruction(chunk: &chunk::Chunk, offset: usize) -> usize {
     print!("{:04} ", offset);
 
-    let instruction: chunk::OpCode = chunk[offset];
+    let instruction: chunk::OpCode = chunk.code[offset];
     match instruction {
+        chunk::OpCode::OpConstant => simple_instruction("OP_CONSTANT", offset),
         chunk::OpCode::OpReturn => simple_instruction("OP_RETURN", offset),
     }
 }
