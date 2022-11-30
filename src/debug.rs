@@ -11,10 +11,14 @@ pub fn dissamble_chunk(chunk: &chunk::Chunk, name: &str) {
 fn dissamble_instruction(chunk: &chunk::Chunk, offset: usize) -> usize {
     print!("{:04} ", offset);
 
-    let instruction: chunk::OpCode = chunk.code[offset];
+    let instruction = num::FromPrimitive::from_i8(chunk.code[offset]);
     match instruction {
-        chunk::OpCode::OpConstant => simple_instruction("OP_CONSTANT", offset),
-        chunk::OpCode::OpReturn => simple_instruction("OP_RETURN", offset),
+        Some(chunk::OpCode::OpConstant) => simple_instruction("OP_CONSTANT", offset),
+        Some(chunk::OpCode::OpReturn) => simple_instruction("OP_RETURN", offset),
+        None => {
+            println!("Unkwnon opcode {}", chunk.code[offset]);
+            return offset + 1;
+        }
     }
 }
 
